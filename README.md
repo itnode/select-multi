@@ -1,4 +1,4 @@
-# select-single
+# select-multis
 
 An element to provide a select for huge value lists. It is requesting an Backend URL to fetch matching list items and shows them.
 Keyboard and Mouse can be used to select an Entry. The defined Entry Value will be placed in a hidden input in the ShadowDOM to 
@@ -6,25 +6,18 @@ provide the Value per HTTP Requst.
 
 ## Synopsis
 
-    <select-single backend="http://private-c3fe6-selectsingle.apiary-mock.com/items" name="member_id" selected='{"title": "Lord Meowser", "id": "9999" }'>
-    </select-single>
+    <select-multi backend="http://private-c3fe6-selectsingle.apiary-mock.com/items" name="member_id">
+        <select-multi-item value="1">First Value</select-multi-item>
+        <select-multi-item value="2">Second Value</select-multi-item>
+        <select-multi-item value="3">Third Value</select-multi-item>
+     </select-multi>
 
 The *backend* Attribute stores the provided Backend JSON.
 The *selected* Attribute stores the JSON of the selected Entry. You can provide a Default with it.
 
 ## Screenshots
 
-The Search Box:
-
-![The Search](https://raw.githubusercontent.com/itnode/select-single/master/screenshots/001.png)
-
-The Value List:
-
-![Value List](https://raw.githubusercontent.com/itnode/select-single/master/screenshots/002.png)
-
-The Selected Entry
-
-![Selected Entry](https://raw.githubusercontent.com/itnode/select-single/master/screenshots/003.png)
+TODO
 
 ## Dependencies
 
@@ -51,13 +44,12 @@ And you can run it via:
     polyserve
 
 Once running, you can preview your element at
-`http://localhost:8080/components/select-single/`, where `select-single` is the name of the directory containing it.
-
+`http://localhost:8080/components/select-multi/`, where `select-multi` is the name of the directory containing it.
 
 ## Testing Your Element
 
 Simply navigate to the `/test` directory of your element to run its tests. If
-you are using Polyserve: `http://localhost:8080/components/select-single/test/`
+you are using Polyserve: `http://localhost:8080/components/select-multi/test/`
 
 ### web-component-tester
 
