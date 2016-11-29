@@ -15,9 +15,30 @@ provide the Value per HTTP Requst.
 The *backend* Attribute stores the provided Backend JSON.
 The *selected* Attribute stores the JSON of the selected Entry. You can provide a Default with it.
 
-## Screenshots
+## Example JSON Structure  
 
-TODO
+	{
+	"items": [
+			{
+				"title": "Swift",
+				"url": "/questions/1/choices/1",
+				"id": 1
+			}, {
+				"title": "Python",
+				"url": "/questions/1/choices/2",
+				"id": 2
+			}, {
+				"title": "Objective-C",
+				"url": "/questions/1/choices/3",
+				"id": 3
+			}, {
+				"title": "Ruby",
+				"url": "/questions/1/choices/4",
+				"id": 4
+			}
+		]
+	}
+
 
 ## Dependencies
 
