@@ -17,13 +17,13 @@ An element providing a solution to no problem in particular.
 
 Example:
 
-    <select-single selected="" backend="http://demo9131812.mockable.io/items">
+    <select-multi selected="" backend="http://demo9131812.mockable.io/items">
         <input type="hidden" name="member_id" /> 
-    </select-single>
+    </select-multi>
 
 @demo
 -->
-<dom-module id="select-single">
+<dom-module id="select-multi">
 
    <template>
 
@@ -245,7 +245,7 @@ function upTo(el, tagName) {
 
   Polymer({
 
-    is: 'select-single',
+    is: 'select-multi',
 
     update_items: function() {
 
@@ -330,7 +330,7 @@ function upTo(el, tagName) {
              this.nextElement.focus(); 
         }       
 
-        this.fire("select-single-set", set);
+        this.fire("select-multi-set", set);
 
 
         return false;
@@ -509,7 +509,7 @@ function upTo(el, tagName) {
         }
 
 
-        this.fire("select-single-set", {});
+        this.fire("select-multi-set", {});
 
         return false;
     },
@@ -546,7 +546,7 @@ function upTo(el, tagName) {
             this.selected_private = this.selected;
 
             if ( current != this.return_hidden.value ) { 
-                this.fire("select-single-set", this.selected);
+                this.fire("select-multi-set", this.selected);
             }
 
         } else {
@@ -699,7 +699,7 @@ function upTo(el, tagName) {
         // Auf Vorgabe setzen
         this.reset_to_preset();
 
-        this.fire("select-single-set", this.selected );
+        this.fire("select-multi-set", this.selected );
 
         window.addEventListener('click', these.select_leave.bind(these) );
     
