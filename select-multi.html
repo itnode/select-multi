@@ -17,7 +17,7 @@ An element providing a solution to no problem in particular.
 
 Example:
 
-    <select-multi backend="http://demo9131812.mockable.io/items">
+    <select-multi name="cginame" backend="http://demo9131812.mockable.io/items">
         <select-multi-item value="11">Titel</select-multi-item>
         <select-multi-item value="33">Titel</select-multi-item>
         <select-multi-item value="99">Titel</select-multi-item>
@@ -191,8 +191,8 @@ Example:
 
     </style>
         
-    <content>{{content}}</content>
-        <input type="hidden" name="" value="{{value}}" /> 
+        <content>{{content}}</content>
+        <input type="hidden" name="{{name}}" value="{{value}}" /> 
         <button type="button" id="delete">X</button>
 
   </template>
@@ -265,18 +265,9 @@ function upTo(el, tagName) {
  
     properties: {
 
-      /**
-       * `multiple` indicates that the element should handle more then one value.
-       * NOT IMPLEMENTED
-       */
-        
-        autofocus: {
-            type: Boolean,
-            value: false
-        },
-
         value: String,
-        content: String
+        content: String,
+        name: String
     },
 
     listeners: {
@@ -310,9 +301,8 @@ function upTo(el, tagName) {
 
         var these = this;
 
-        
-        
-
+        these.parentNode = Polymer.dom(these).parentNode;
+        these.name = these.parentNode.name; 
     },
 
     detached: function() {
@@ -396,11 +386,13 @@ function upTo(el, tagName) {
         this.$.query.value  = "";
         this.query          = "";
         this.items          = [];
-      
+     
+        // attach new child …
         var newItem = document.createElement('select-multi-item');
        
         newItem.content = set._title;
         newItem.value   = set._return;
+        newItem.name    = these.name;
 
         Polymer.dom(these).appendChild(newItem);
        
@@ -408,7 +400,6 @@ function upTo(el, tagName) {
 
         return false;
     },
-
 
     select_down: function(e) {
 
@@ -486,9 +477,7 @@ function upTo(el, tagName) {
     handleblur: function(e) {
 
         this.message = undefined;
-
         this.select_leave(e);
-
     },
 
     setajax: function(e) {
@@ -562,13 +551,7 @@ function upTo(el, tagName) {
 
     show_input: function() {
 
-        if ( this.hideOnSelect === true ) {
-            this.$.query.style.display = "inline-block";
-            this.$.query.focus();
-        }
-
         return false;
- 
     },
 
     properties: {
@@ -577,22 +560,13 @@ function upTo(el, tagName) {
        * `multiple` indicates that the element should handle more then one value.
        * NOT IMPLEMENTED
        */
-        multiple:  Boolean,
 
         autofocus: {
             type: Boolean,
             value: false
         },
 
-        /**
-          * 'hideOnSelect' - when selected, hide input
-          */
-        hideOnSelect: {
-
-            type: Boolean,
-            value: true,
-        },
-
+      
         /**
         * 'items' the list of items
         */        
@@ -635,8 +609,9 @@ function upTo(el, tagName) {
 
             type: String,
             value: "Type for search",
-        }
+        },
 
+        name: String,
         
     },
 
@@ -661,8 +636,6 @@ function upTo(el, tagName) {
       // loading resources, etc).
 
         var these = this;
-
-        these.target = these;
 
         this.template_return        = new Template(this.formatReturn);
         this.template_title         = new Template(this.formatTitle);
