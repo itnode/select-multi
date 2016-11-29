@@ -17,8 +17,10 @@ An element providing a solution to no problem in particular.
 
 Example:
 
-    <select-multi selected="" backend="http://demo9131812.mockable.io/items">
-        <input type="hidden" name="member_id" /> 
+    <select-multi backend="http://demo9131812.mockable.io/items">
+        <select-multi-item value="11">Titel</select-multi-item>
+        <select-multi-item value="33">Titel</select-multi-item>
+        <select-multi-item value="99">Titel</select-multi-item>
     </select-multi>
 
 @demo
@@ -30,18 +32,14 @@ Example:
     <style>
     :host {
       display: inline-block;
-      width: 400px;
       cursor: pointer;
     }
 
     * {
-      
         box-sizing: border-box;
-
     }
 
     ul {
-
         display: inline;
     }
         
@@ -81,6 +79,7 @@ Example:
     }
 
     #container {
+        display: inline-block;
         position: relative;
     }  
 
@@ -122,13 +121,6 @@ Example:
         display: none;
     }
 
-   
-    #selected {
-      border: 1px solid #EEE;
-      padding: 2px 2px 2px 6px ;
-      display: block;
-   }
-
    small {
     
        font-size: 80%;
@@ -137,19 +129,8 @@ Example:
 
 </style>
 
-   
+    
     <content></content>
-
-    <template is="dom-if" if="{{selected_private}}">
-       
-        <div id="selected" on-click="show_input">
-
-            <strong >{{selected_private._title}}</strong> <small>{{selected_private._description }}</small>
-            <button type="button" name="reset_value" class="delete" on-click="reset_to_null">X</button>
-        </div>
-
-    </template>
-   
 
     <div id="container">
 
@@ -177,6 +158,42 @@ Example:
     <iron-a11y-keys target="[[target]]" keys="pageup up"     on-keys-pressed="select_up"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="enter"         on-keys-pressed="select_enter"></iron-a11y-keys>
     <iron-a11y-keys target="[[target]]" keys="esc"           on-keys-pressed="select_esc"></iron-a11y-keys>
+
+  </template>
+
+</dom-module>
+
+<dom-module id="select-multi-item">
+
+    <template>
+
+    <style>
+        :host {
+          display: inline-block;
+          cursor: pointer;
+          border: 1px solid #eee;
+          padding: 2px 5px;
+        }
+
+        button {
+            
+            color: #900;
+            border: 0 none;
+            background: transparent;
+            padding: 2px;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+    </style>
+        
+    <content>{{content}}</content>
+        <input type="hidden" name="" value="{{value}}" /> 
+        <button type="button" id="delete">X</button>
 
   </template>
 
@@ -242,6 +259,70 @@ function upTo(el, tagName) {
   return null;
 }
 
+  Polymer({
+
+    is: 'select-multi-item',
+ 
+    properties: {
+
+      /**
+       * `multiple` indicates that the element should handle more then one value.
+       * NOT IMPLEMENTED
+       */
+        
+        autofocus: {
+            type: Boolean,
+            value: false
+        },
+
+        value: String,
+        content: String
+    },
+
+    listeners: {
+        'delete.tap': 'deleteItem'
+    },
+
+    deleteItem: function() {
+
+        var these = this;
+        these.remove();
+    },
+ 
+    // Element Lifecycle
+
+    ready: function() {
+      // `ready` is called after all elements have been configured, but
+      // propagates bottom-up. This element's children are ready, but parents
+      // are not.
+      //
+      // This is the point where you should make modifications to the DOM (when
+      // necessary), or kick off any processes the element wants to perform.
+    },
+
+    attached: function() {
+      // `attached` fires once the element and its parents have been inserted
+      // into a document.
+      //
+      // This is a good place to perform any work related to your element's
+      // visual state or active behavior (measuring sizes, beginning animations,
+      // loading resources, etc).
+
+        var these = this;
+
+        
+        
+
+    },
+
+    detached: function() {
+      // The analog to `attached`, `detached` fires when the element has been
+      // removed from a document.
+      //
+      // Use this to clean up anything you did in `attached`.
+
+    }
+  });
 
   Polymer({
 
@@ -297,13 +378,12 @@ function upTo(el, tagName) {
 
         e.preventDefault();
         this.items = [];
-
-        this.reset_to_preset();
-
         return false;
     },
 
     select_set: function(set) {
+
+        var these = this;
 
         if ( set === undefined) {
             return false
@@ -313,25 +393,18 @@ function upTo(el, tagName) {
         set._title  = this.template_title.parse(set);
         set._description = this.template_description.parse(set);
 
-        this.selected = set;
-        this.selected_private    = set;
-        this.return_hidden.value = set._return;
-
         this.$.query.value  = "";
         this.query          = "";
         this.items          = [];
+      
+        var newItem = document.createElement('select-multi-item');
        
-        if ( this.hideOnSelect === true )  {
-            this.$.query.style.display = "none";
-        }
+        newItem.content = set._title;
+        newItem.value   = set._return;
 
-        if ( this.nextElement ) { 
-
-             this.nextElement.focus(); 
-        }       
-
+        Polymer.dom(these).appendChild(newItem);
+       
         this.fire("select-multi-set", set);
-
 
         return false;
     },
@@ -460,11 +533,6 @@ function upTo(el, tagName) {
         });
 
         this.items = [];
-
-        if ( this.selected_private !== undefined ) { 
-
-            this.reset_to_preset(); 
-        }
    },
 
     hresponse: function(request) {
@@ -491,68 +559,16 @@ function upTo(el, tagName) {
         }
     },
 
-    // Reset to empty field and value
-    reset_to_null: function(e) {
-
-        e.preventDefault();
-
-        this.return_hidden.value = "";
-        this.items               = [];
-        this.selected_private    = undefined;
-        this.selected            = undefined;
-
-
-        if ( this.hideOnSelect === true ) {
-
-            this.$.query.style.display = "inline-block";
-            this.$.query.focus();
-        }
-
-
-        this.fire("select-multi-set", {});
-
-        return false;
-    },
-
 
     show_input: function() {
 
-        this.selected_private    = undefined;
-
         if ( this.hideOnSelect === true ) {
-
             this.$.query.style.display = "inline-block";
             this.$.query.focus();
         }
 
         return false;
  
-    },
-
-    // Reset to 
-    reset_to_preset: function() {
-        
-        if ( this.hideOnSelect  && typeof this.selected === "object" )  {
-
-            this.$.query.style.display = "none";
-
-            var current = this.return_hidden.value;
-
-            this.return_hidden.value    = this.template_return.parse(this.selected);
-            this.selected._title        = this.template_title.parse(this.selected);
-            this.selected._return       = this.template_return.parse(this.selected);
-            this.selected._description  = this.template_description.parse(this.selected);
-         
-            this.selected_private = this.selected;
-
-            if ( current != this.return_hidden.value ) { 
-                this.fire("select-multi-set", this.selected);
-            }
-
-        } else {
-
-            this.reset_to_null;
-        }
     },
 
     properties: {
@@ -578,17 +594,6 @@ function upTo(el, tagName) {
         },
 
         /**
-        * 'selected' the current selected object
-        */ 
-        selected:  Object,
-       
-
-        /**
-          *
-          */
-        selected_private: Object,
-
-        /**
         * 'items' the list of items
         */        
         items:    {
@@ -603,11 +608,6 @@ function upTo(el, tagName) {
         
         message:    String,
         
-        /**
-          * 
-          */
-        preselected: Number,
-
         query: String,
 
         /**
@@ -664,42 +664,9 @@ function upTo(el, tagName) {
 
         these.target = these;
 
-        // Get next Element for auto focus
-        this.return_hidden =  Polymer.dom(this).querySelector('input');
-
-        var current_name = this.return_hidden.name;
-        var form = upTo(this,'form').elements;
-        var forEach = Array.prototype.forEach;
-
-        var found  = false;
-        var foundi = 0;
-
-        forEach.call(form, function(x) {
- 
-            if ( found === true ) {
-
-                foundi++;
-
-                if ( foundi == 2 ) {
-                    these.nextElement = x ;
-                }
-            }
-
-            if ( current_name === x.name && x.name !== undefined ) {
-                found = true;
-            }
-        });
-            
-
-
         this.template_return        = new Template(this.formatReturn);
         this.template_title         = new Template(this.formatTitle);
         this.template_description   = new Template(this.formatDescription);
-
-        // Auf Vorgabe setzen
-        this.reset_to_preset();
-
-        this.fire("select-multi-set", this.selected );
 
         window.addEventListener('click', these.select_leave.bind(these) );
     

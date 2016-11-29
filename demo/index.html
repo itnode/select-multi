@@ -14,19 +14,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
     <title>select-single Demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../select-single.html">
+    <link rel="import" href="../select-multi.html">
   </head>
   <body>
 
-    <p>An example of <code>&lt;select-single&gt;</code>:</p>
+    <p>An example of <code>&lt;select-multi&gt;</code>:</p>
 
     <form method="get">
         
 
-        <select-single backend="http://private-c3fe6-selectsingle.apiary-mock.com/items?hello=world" selected='{"title": "Lord Meowser", "id": "9999" }'>
-            <input type="hidden" name="member_id" value="" />
-        </select-single>
-    
+        <select-multi backend="http://private-c3fe6-selectsingle.apiary-mock.com/items?hello=world">
+
+            <select-multi-item value="1">First Item</select-multi-item>
+            <select-multi-item value="2">Second Item</select-multi-item>
+            <select-multi-item value="3">Third Item</select-multi-item>
+
+        </select-multi>
+   
 
         <button type="submit">Submit </button>
 
