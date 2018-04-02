@@ -1,6 +1,6 @@
 {
   "name": "select-multi",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "authors": [
     "Jens Gassmann <jens.gassmann@atomix.de>"
   ],
@@ -20,13 +20,13 @@
     "/demo/"
   ],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.0.0",
+    "polymer": "Polymer/polymer#^2.0.0",
     "iron-ajax": "PolymerElements/iron-ajax",
-    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^1.0.2",
+    "iron-a11y-keys": "PolymerElements/iron-a11y-keys#^2.0.0",
     "uri.js": "~1.16.0"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-component-page": "PolymerElements/iron-component-page#^2.0.0",
     "web-component-tester": "*"
   }
 }
